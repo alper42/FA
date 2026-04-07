@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'blocs/journey/journey_bloc.dart';
+import 'blocs/departure/departure_bloc.dart';
+import 'blocs/station_search/station_search_bloc.dart';
 import 'screens/home_screen.dart';
 import 'services/transit_service.dart';
 
@@ -14,12 +17,7 @@ void main() async {
       statusBarIconBrightness: Brightness.light,
     ),
   );
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => TransitService(),
-      child: const FAAApp(),
-    ),
-  );
+  runApp(const FAAApp());
 }
 
 class FAAApp extends StatelessWidget {
@@ -27,19 +25,30 @@ class FAAApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'FA',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0057B8),
-          brightness: Brightness.dark,
+    final service = TransitService();
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => JourneyBloc(service: service)),
+        BlocProvider(create: (_) => DepartureBloc(service: service)
+          ..add(LoadDepartures(
+              stationId: '8000261', stationName: 'München Hbf'))),
+        BlocProvider(create: (_) => StationSearchBloc(service: service)),
+      ],
+      child: MaterialApp(
+        title: 'FA',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0xFF0057B8),
+            brightness: Brightness.dark,
+          ),
+          scaffoldBackgroundColor: const Color(0xFF0A0E1A),
+          fontFamily: 'Roboto',
         ),
-        scaffoldBackgroundColor: const Color(0xFF0A0E1A),
-        fontFamily: 'Roboto',
+        home: const HomeScreen(),
       ),
-      home: const HomeScreen(),
     );
   }
 }

@@ -68,39 +68,6 @@ lib/
 
 ---
 
-## Lokale Entwicklung
-
-### Voraussetzungen
-- Flutter SDK 3.x
-- Dart SDK 3.0+
-- Android Studio oder VS Code mit Flutter-Extension
-
-### Installation
-
-```bash
-# Repository klonen
-git clone https://github.com/alper42/FahrplanAuskunftVS.git
-cd FahrplanAuskunftVS
-
-# Dependencies installieren
-flutter pub get
-
-# App starten (Emulator oder echtes Gerät)
-flutter run
-```
-
-### Build
-
-```bash
-# Android APK
-flutter build apk
-
-# iOS (nur auf macOS)
-flutter build ios
-```
-
----
-
 ## API
 
 Die App nutzt die offene [DB REST API v6](https://v6.db.transport.rest) — keine Registrierung oder API-Key erforderlich.
